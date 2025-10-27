@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Esyasoft_adv_training\\Day_4\\CollegeApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{42B5FCC6-FC1F-47F0-81FF-2096E8173D51}|CollegeApp.csproj|d:\\esyasoft_adv_training\\day_4\\collegeapp\\controllers\\collegeapp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{42B5FCC6-FC1F-47F0-81FF-2096E8173D51}|CollegeApp.csproj|solutionrelative:controllers\\collegeapp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{42B5FCC6-FC1F-47F0-81FF-2096E8173D51}|CollegeApp.csproj|d:\\esyasoft_adv_training\\day_4\\collegeapp\\model\\studentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{42B5FCC6-FC1F-47F0-81FF-2096E8173D51}|CollegeApp.csproj|solutionrelative:model\\studentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{42B5FCC6-FC1F-47F0-81FF-2096E8173D51}|CollegeApp.csproj|d:\\esyasoft_adv_training\\day_4\\collegeapp\\model\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{42B5FCC6-FC1F-47F0-81FF-2096E8173D51}|CollegeApp.csproj|solutionrelative:model\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Student.cs",
+              "DocumentMoniker": "D:\\Esyasoft_adv_training\\Day_4\\CollegeApp\\Model\\Student.cs",
+              "RelativeDocumentMoniker": "Model\\Student.cs",
+              "ToolTip": "D:\\Esyasoft_adv_training\\Day_4\\CollegeApp\\Model\\Student.cs",
+              "RelativeToolTip": "Model\\Student.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T04:39:54.842Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CollegeApp.cs",
+              "DocumentMoniker": "D:\\Esyasoft_adv_training\\Day_4\\CollegeApp\\Controllers\\CollegeApp.cs",
+              "RelativeDocumentMoniker": "Controllers\\CollegeApp.cs",
+              "ToolTip": "D:\\Esyasoft_adv_training\\Day_4\\CollegeApp\\Controllers\\CollegeApp.cs",
+              "RelativeToolTip": "Controllers\\CollegeApp.cs",
+              "ViewState": "AgIAALAAAAAAAAAAAAAswLMAAABsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T04:30:46.593Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "studentDTO.cs",
+              "DocumentMoniker": "D:\\Esyasoft_adv_training\\Day_4\\CollegeApp\\Model\\studentDTO.cs",
+              "RelativeDocumentMoniker": "Model\\studentDTO.cs",
+              "ToolTip": "D:\\Esyasoft_adv_training\\Day_4\\CollegeApp\\Model\\studentDTO.cs",
+              "RelativeToolTip": "Model\\studentDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T04:27:14.58Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
