@@ -1,0 +1,14 @@
+D:\Esyasoft_adv_training\Day_2\CS.2.013\bin\Debug\net8.0\CS.2.013.exe
+D:\Esyasoft_adv_training\Day_2\CS.2.013\bin\Debug\net8.0\CS.2.013.deps.json
+D:\Esyasoft_adv_training\Day_2\CS.2.013\bin\Debug\net8.0\CS.2.013.runtimeconfig.json
+D:\Esyasoft_adv_training\Day_2\CS.2.013\bin\Debug\net8.0\CS.2.013.dll
+D:\Esyasoft_adv_training\Day_2\CS.2.013\bin\Debug\net8.0\CS.2.013.pdb
+D:\Esyasoft_adv_training\Day_2\CS.2.013\obj\Debug\net8.0\CS.2.013.GeneratedMSBuildEditorConfig.editorconfig
+D:\Esyasoft_adv_training\Day_2\CS.2.013\obj\Debug\net8.0\CS.2.013.AssemblyInfoInputs.cache
+D:\Esyasoft_adv_training\Day_2\CS.2.013\obj\Debug\net8.0\CS.2.013.AssemblyInfo.cs
+D:\Esyasoft_adv_training\Day_2\CS.2.013\obj\Debug\net8.0\CS.2.013.csproj.CoreCompileInputs.cache
+D:\Esyasoft_adv_training\Day_2\CS.2.013\obj\Debug\net8.0\CS.2.013.dll
+D:\Esyasoft_adv_training\Day_2\CS.2.013\obj\Debug\net8.0\refint\CS.2.013.dll
+D:\Esyasoft_adv_training\Day_2\CS.2.013\obj\Debug\net8.0\CS.2.013.pdb
+D:\Esyasoft_adv_training\Day_2\CS.2.013\obj\Debug\net8.0\CS.2.013.genruntimeconfig.cache
+D:\Esyasoft_adv_training\Day_2\CS.2.013\obj\Debug\net8.0\ref\CS.2.013.dll
