@@ -1,0 +1,667 @@
+﻿@* 
+
+
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Your App Name</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Course Details</h2>
+                    <div>
+                        <button class="btn btn-info me-2 all-students-btn" style="display: none;" onclick="showAllStudents()">
+                            <i class="bi bi-people"></i> Student Details
+                        </button>
+                        <a href="/Course/Add" class="btn btn-success add-course-btn" style="display: none;">
+                            <i class="bi bi-plus-circle me-1"></i>Add Course
+                        </a>
+                    </div>
+                </div>
+                <div class="card shadow-lg p-4">
+                    <div class="d-flex justify-content-between mb-3">
+                        <button id="loadBtn" class="btn btn-primary">
+                            <i class="bi bi-arrow-clockwise"></i> Load Courses
+                        </button>
+                        <!-- Dropdown for filtering by Department -->
+                        <div class="d-flex align-items-center">
+                            <label class="me-2 fw-semibold text-secondary">Filter by Department:</label>
+                            <select id="departmentDropdown" class="form-select" style="width: 200px;">
+                                <option value="">-- Select Department --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Course ID</th>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th>Department</th>
+                                    <th>Semester</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courseTableBody"><!-- Data will be appended here --></tbody>
+                        </table>
+                    </div>
+                    <div id="pagination" class="mt-3"></div>
+                </div>
+                <p id="msg" class="text-danger mt-3 text-center"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Details Modal (Course-Specific) -->
+    <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="studentModalLabel">Students Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Roll Number</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Date of Birth</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentModalBody">
+                                <!-- Student data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Students Modal -->
+    <div class="modal fade" id="allStudentsModal" tabindex="-1" aria-labelledby="allStudentsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="allStudentsModalLabel">All Students Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Roll Number</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Date of Birth</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allStudentsModalBody">
+                                <!-- All student data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+        let coursesData = [];
+        let currentPage = 1;
+        const pageSize = 5; // Number of courses per page
+        let userRole = null; // Store user role
+
+        $(document).ready(function () {
+            // Decode JWT to get user role
+            const token = localStorage.getItem("jwtToken");
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+                    userRole = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload.role; // Adjust claim key if needed
+                } catch (e) {
+                    console.error("Error decoding token:", e);
+                }
+            }
+
+            // Show/hide elements based on role
+            if (userRole === "Teacher" || userRole === "Admin") {
+                $(".add-course-btn").show(); // Show Add Course button
+                $(".all-students-btn").show(); // Show All Students button
+            } else {
+                $(".add-course-btn").hide(); // Hide for User role
+                $(".all-students-btn").hide(); // Hide for User role
+            }
+
+            loadCourses();
+        });
+
+        $("#loadBtn").click(loadCourses);
+
+        function loadCourses() {
+            var token = localStorage.getItem("jwtToken");
+            if (!token) {
+                $("#msg").text("Please log in first!");
+                return;
+            }
+            $.ajax({
+                url: "https://localhost:7097/api/Course/AllCourses", // Adjust port if needed
+                type: "GET",
+                headers: { "Authorization": "Bearer " + token },
+                success: function (data) {
+                    coursesData = data;
+                    populateDropdown(data);
+                    currentPage = 1;
+                    renderTable();
+                },
+                error: function (xhr) {
+                    if (xhr.status === 401) {
+                        $("#msg").text("Unauthorized: Please login again.");
+                    } else {
+                        $("#msg").text("Error fetching data from server.");
+                    }
+                }
+            });
+        }
+
+        // Populate dropdown with unique departments
+        function populateDropdown(data) {
+            let depts = [...new Set(data.map(c => c.department).filter(d => d))];
+            let options = "<option value=''>-- Select Department --</option>";
+            depts.forEach(d => {
+                options += `<option value='${d}'>${d}</option>`;
+            });
+            $("#departmentDropdown").html(options);
+        }
+
+        // Filter by department
+        $("#departmentDropdown").change(function () {
+            const dept = $(this).val();
+            let filtered = dept ? coursesData.filter(c => c.department === dept) : coursesData;
+            coursesData = filtered; // Update to filtered data for pagination
+            currentPage = 1;
+            renderTable();
+        });
+
+        // Render Table with Pagination
+        function renderTable() {
+            if (!coursesData || coursesData.length === 0) {
+                $("#courseTableBody").html("<tr><td colspan='6' class='text-muted text-center'>No courses found.</td></tr>");
+                $("#pagination").html("");
+                return;
+            }
+
+            const totalPages = Math.ceil(coursesData.length / pageSize);
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const paginatedData = coursesData.slice(start, end);
+
+            let rows = '';
+            paginatedData.forEach(course => {
+                let actions = '';
+
+                if (userRole === "Teacher" || userRole === "Admin") {
+                    // Show full actions for Teacher/Admin
+                    actions = `
+                        <a href="/Course/Edit/${course.courseId}" class="btn btn-sm btn-primary me-1">
+                            <i class="bi bi-pencil"></i> Edit
+                        </a>
+                        <a href="/Course/Delete/${course.courseId}" class="btn btn-sm btn-danger me-1">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                        <button class="btn btn-sm btn-info" onclick="showStudents(${course.courseId})">
+                            <i class="bi bi-people"></i> Students Details
+                        </button>
+                    `;
+                } else {
+                    // For User role: Show only Students Details (modal)
+                    actions = `
+                        <button class="btn btn-sm btn-info" onclick="showStudents(${course.courseId})">
+                            <i class="bi bi-people"></i> Students Details
+                        </button>
+                    `;
+                }
+
+                rows += `<tr>
+                    <td>${course.courseId}</td>
+                    <td>${course.courseCode}</td>
+                    <td>${course.courseName}</td>
+                    <td>${course.department || 'N/A'}</td>
+                    <td>${course.semester || 'N/A'}</td>
+                    <td>${actions}</td>
+                </tr>`;
+            });
+            $("#courseTableBody").html(rows);
+
+            // Pagination Controls
+            let paginationHtml = `
+                <div class='d-flex justify-content-between align-items-center'>
+                    <button class='btn btn-outline-primary btn-sm' id='prevPage' ${currentPage === 1 ? "disabled" : ""}>
+                        <i class='bi bi-arrow-left'></i> Previous
+                    </button>
+                    <span class='fw-semibold text-secondary'>
+                        Page ${currentPage} of ${totalPages}
+                    </span>
+                    <button class='btn btn-outline-primary btn-sm' id='nextPage' ${currentPage === totalPages ? "disabled" : ""}>
+                        Next <i class='bi bi-arrow-right'></i>
+                    </button>
+                </div>
+            `;
+            $("#pagination").html(paginationHtml);
+
+            $("#prevPage").click(() => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+
+            $("#nextPage").click(() => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+        }
+
+        // Function to show students in modal (course-specific)
+        function showStudents(courseId) {
+            const course = coursesData.find(c => c.courseId === courseId);
+            if (!course || !course.students || course.students.length === 0) {
+                $("#studentModalBody").html("<tr><td colspan='8' class='text-muted text-center'>No students enrolled in this course.</td></tr>");
+            } else {
+                let rows = '';
+                course.students.forEach(student => {
+                    rows += `<tr>
+                        <td>${student.studentId}</td>
+                        <td>${student.rollNumber}</td>
+                        <td>${student.name}</td>
+                        <td>${student.email || 'N/A'}</td>
+                        <td>${student.phone || 'N/A'}</td>
+                        <td>${student.address || 'N/A'}</td>
+                        <td>${student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString() : 'N/A'}</td>
+                        <td>${student.gender || 'N/A'}</td>
+                    </tr>`;
+                });
+                $("#studentModalBody").html(rows);
+            }
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('studentModal'));
+            modal.show();
+        }
+
+        // Function to show all students in modal
+        function showAllStudents() {
+            const token = localStorage.getItem("jwtToken");
+            if (!token) {
+                alert("Please log in first!");
+                return;
+            }
+            $.ajax({
+                url: "https://localhost:7097/api/Student/AllStudents",
+                type: "GET",
+                headers: { "Authorization": "Bearer " + token },
+                success: function (data) {
+                    if (!data || data.length === 0) {
+                        $("#allStudentsModalBody").html("<tr><td colspan='8' class='text-muted text-center'>No students found.</td></tr>");
+                    } else {
+                        let rows = '';
+                        data.forEach(student => {
+                            rows += `<tr>
+                                <td>${student.studentId}</td>
+                                <td>${student.rollNumber}</td>
+                                <td>${student.name}</td>
+                                <td>${student.email || 'N/A'}</td>
+                                <td>${student.phone || 'N/A'}</td>
+                                <td>${student.address || 'N/A'}</td>
+                                <td>${student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString() : 'N/A'}</td>
+                                <td>${student.gender || 'N/A'}</td>
+                            </tr>`;
+                        });
+                        $("#allStudentsModalBody").html(rows);
+                    }
+                    // Show the modal
+                    const modal = new bootstrap.Modal(document.getElementById('allStudentsModal'));
+                    modal.show();
+                },
+                error: function (xhr) {
+                    if (xhr.status === 401) {
+                        alert("Unauthorized: Please login again.");
+                    } else {
+                        alert("Error fetching student data.");
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html> *@
+
+
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Your App Name</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Course Details</h2>
+                    <div>
+                        <a href="/Student/students" class="btn btn-info me-2 all-students-btn" style="display: none;">
+                            <i class="bi bi-people"></i> Student Details
+                        </a>
+                        <a href="/Course/Add" class="btn btn-success add-course-btn" style="display: none;">
+                            <i class="bi bi-plus-circle me-1"></i>Add Course
+                        </a>
+                    </div>
+                </div>
+                <div class="card shadow-lg p-4">
+                    <div class="d-flex justify-content-between mb-3">
+                        <button id="loadBtn" class="btn btn-primary">
+                            <i class="bi bi-arrow-clockwise"></i> Load Courses
+                        </button>
+                        <!-- Dropdown for filtering by Department -->
+                        <div class="d-flex align-items-center">
+                            <label class="me-2 fw-semibold text-secondary">Filter by Department:</label>
+                            <select id="departmentDropdown" class="form-select" style="width: 200px;">
+                                <option value="">-- Select Department --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Course ID</th>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th>Department</th>
+                                    <th>Semester</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courseTableBody"><!-- Data will be appended here --></tbody>
+                        </table>
+                    </div>
+                    <div id="pagination" class="mt-3"></div>
+                </div>
+                <p id="msg" class="text-danger mt-3 text-center"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Details Modal (Course-Specific) -->
+    <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="studentModalLabel">Students Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Roll Number</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Date of Birth</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentModalBody">
+                                <!-- Student data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+        let coursesData = [];
+        let currentPage = 1;
+        const pageSize = 5; // Number of courses per page
+        let userRole = null; // Store user role
+
+        $(document).ready(function () {
+            // Decode JWT to get user role
+            const token = localStorage.getItem("jwtToken");
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+                    userRole = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload.role; // Adjust claim key if needed
+                } catch (e) {
+                    console.error("Error decoding token:", e);
+                }
+            }
+
+            // Show/hide elements based on role
+            if (userRole === "Teacher" || userRole === "Admin") {
+                $(".add-course-btn").show(); // Show Add Course button
+                $(".all-students-btn").show(); // Show All Students button
+            } else {
+                $(".add-course-btn").hide(); // Hide for User role
+                $(".all-students-btn").hide(); // Hide for User role
+            }
+
+            loadCourses();
+        });
+
+        $("#loadBtn").click(loadCourses);
+
+        function loadCourses() {
+            var token = localStorage.getItem("jwtToken");
+            if (!token) {
+                $("#msg").text("Please log in first!");
+                return;
+            }
+            $.ajax({
+                url: "https://localhost:7097/api/Course/AllCourses", // Adjust port if needed
+                type: "GET",
+                headers: { "Authorization": "Bearer " + token },
+                success: function (data) {
+                    coursesData = data;
+                    populateDropdown(data);
+                    currentPage = 1;
+                    renderTable();
+                },
+                error: function (xhr) {
+                    if (xhr.status === 401) {
+                        $("#msg").text("Unauthorized: Please login again.");
+                    } else {
+                        $("#msg").text("Error fetching data from server.");
+                    }
+                }
+            });
+        }
+
+        // Populate dropdown with unique departments
+        function populateDropdown(data) {
+            let depts = [...new Set(data.map(c => c.department).filter(d => d))];
+            let options = "<option value=''>-- Select Department --</option>";
+            depts.forEach(d => {
+                options += `<option value='${d}'>${d}</option>`;
+            });
+            $("#departmentDropdown").html(options);
+        }
+
+        // Filter by department
+        $("#departmentDropdown").change(function () {
+            const dept = $(this).val();
+            let filtered = dept ? coursesData.filter(c => c.department === dept) : coursesData;
+            coursesData = filtered; // Update to filtered data for pagination
+            currentPage = 1;
+            renderTable();
+        });
+
+        // Render Table with Pagination
+        function renderTable() {
+            if (!coursesData || coursesData.length === 0) {
+                $("#courseTableBody").html("<tr><td colspan='6' class='text-muted text-center'>No courses found.</td></tr>");
+                $("#pagination").html("");
+                return;
+            }
+
+            const totalPages = Math.ceil(coursesData.length / pageSize);
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const paginatedData = coursesData.slice(start, end);
+
+            let rows = '';
+            paginatedData.forEach(course => {
+                let actions = '';
+
+                if (userRole === "Teacher" || userRole === "Admin") {
+                    // Show full actions for Teacher/Admin
+                    actions = `
+                        <a href="/Course/Edit/${course.courseId}" class="btn btn-sm btn-primary me-1">
+                            <i class="bi bi-pencil"></i> Edit
+                        </a>
+                        <a href="/Course/Delete/${course.courseId}" class="btn btn-sm btn-danger me-1">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                        <button class="btn btn-sm btn-info" onclick="showStudents(${course.courseId})">
+                            <i class="bi bi-people"></i> Students Details
+                        </button>
+                    `;
+                } else {
+                    // For User role: Show only Students Details (modal)
+                    actions = `
+                        <button class="btn btn-sm btn-info" onclick="showStudents(${course.courseId})">
+                            <i class="bi bi-people"></i> Students Details
+                        </button>
+                    `;
+                }
+
+                rows += `<tr>
+                    <td>${course.courseId}</td>
+                    <td>${course.courseCode}</td>
+                    <td>${course.courseName}</td>
+                    <td>${course.department || 'N/A'}</td>
+                    <td>${course.semester || 'N/A'}</td>
+                    <td>${actions}</td>
+                </tr>`;
+            });
+            $("#courseTableBody").html(rows);
+
+            // Pagination Controls
+            let paginationHtml = `
+                <div class='d-flex justify-content-between align-items-center'>
+                    <button class='btn btn-outline-primary btn-sm' id='prevPage' ${currentPage === 1 ? "disabled" : ""}>
+                        <i class='bi bi-arrow-left'></i> Previous
+                    </button>
+                    <span class='fw-semibold text-secondary'>
+                        Page ${currentPage} of ${totalPages}
+                    </span>
+                    <button class='btn btn-outline-primary btn-sm' id='nextPage' ${currentPage === totalPages ? "disabled" : ""}>
+                        Next <i class='bi bi-arrow-right'></i>
+                    </button>
+                </div>
+            `;
+            $("#pagination").html(paginationHtml);
+
+            $("#prevPage").click(() => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+
+            $("#nextPage").click(() => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+        }
+
+        // Function to show students in modal (course-specific)
+        function showStudents(courseId) {
+            const course = coursesData.find(c => c.courseId === courseId);
+            if (!course || !course.students || course.students.length === 0) {
+                $("#studentModalBody").html("<tr><td colspan='8' class='text-muted text-center'>No students enrolled in this course.</td></tr>");
+            } else {
+                let rows = '';
+                course.students.forEach(student => {
+                    rows += `<tr>
+                        <td>${student.studentId}</td>
+                        <td>${student.rollNumber}</td>
+                        <td>${student.name}</td>
+                        <td>${student.email || 'N/A'}</td>
+                        <td>${student.phone || 'N/A'}</td>
+                        <td>${student.address || 'N/A'}</td>
+                        <td>${student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString() : 'N/A'}</td>
+                        <td>${student.gender || 'N/A'}</td>
+                    </tr>`;
+                });
+                $("#studentModalBody").html(rows);
+            }
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('studentModal'));
+            modal.show();
+        }
+    </script>
+</body>
+</html>

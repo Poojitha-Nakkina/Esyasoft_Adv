@@ -1,0 +1,389 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\userlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\userlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\forgotpassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\forgotpassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\migrations\\20251031093751_initial1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:migrations\\20251031093751_initial1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\collegedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\collegedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\changepassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\changepassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\resetpassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\resetpassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\emailsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\emailsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\studentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\studentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\repositories\\collegerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:repositories\\collegerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\repositories\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:repositories\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\repositories\\icollegerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:repositories\\icollegerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\repositories\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:repositories\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\otprequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\otprequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\mailrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\mailrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\controllers\\coursecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:controllers\\coursecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\models\\coursedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:models\\coursedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|d:\\esyasoft_adv\\dotnet\\coursesassignviews\\migrations\\20251030084212_initialize1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94166B28-6EF6-45F8-AD35-36AE025C2590}|CoursesAssignviews.csproj|solutionrelative:migrations\\20251030084212_initialize1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserLogin.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\UserLogin.cs",
+              "RelativeDocumentMoniker": "Models\\UserLogin.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\UserLogin.cs",
+              "RelativeToolTip": "Models\\UserLogin.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T07:18:48.218Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAUwH0AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T07:23:38.546Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ForgotPassword.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\ForgotPassword.cs",
+              "RelativeDocumentMoniker": "Models\\ForgotPassword.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\ForgotPassword.cs",
+              "RelativeToolTip": "Models\\ForgotPassword.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T09:24:50.196Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "20251031093751_initial1.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Migrations\\20251031093751_initial1.cs",
+              "RelativeDocumentMoniker": "Migrations\\20251031093751_initial1.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Migrations\\20251031093751_initial1.cs",
+              "RelativeToolTip": "Migrations\\20251031093751_initial1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T09:37:52.173Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CollegeDbContext.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\CollegeDbContext.cs",
+              "RelativeDocumentMoniker": "Models\\CollegeDbContext.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\CollegeDbContext.cs",
+              "RelativeToolTip": "Models\\CollegeDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T09:13:48.688Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ChangePassword.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\ChangePassword.cs",
+              "RelativeDocumentMoniker": "Models\\ChangePassword.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\ChangePassword.cs",
+              "RelativeToolTip": "Models\\ChangePassword.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T09:27:26.623Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ResetPassword.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\ResetPassword.cs",
+              "RelativeDocumentMoniker": "Models\\ResetPassword.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\ResetPassword.cs",
+              "RelativeToolTip": "Models\\ResetPassword.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T09:27:10.409Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "EmailSettings.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\EmailSettings.cs",
+              "RelativeDocumentMoniker": "Models\\EmailSettings.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\EmailSettings.cs",
+              "RelativeToolTip": "Models\\EmailSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T06:59:27.933Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-28T09:10:17.408Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAQwBMAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T09:50:55.581Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "StudentController.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Controllers\\StudentController.cs",
+              "RelativeDocumentMoniker": "Controllers\\StudentController.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Controllers\\StudentController.cs",
+              "RelativeToolTip": "Controllers\\StudentController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T09:32:36.886Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA0AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T10:45:18.012Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "OtpRequestDto.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\OtpRequestDto.cs",
+              "RelativeDocumentMoniker": "Models\\OtpRequestDto.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\OtpRequestDto.cs",
+              "RelativeToolTip": "Models\\OtpRequestDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T07:11:59.942Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "StudentDTO.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\StudentDTO.cs",
+              "RelativeDocumentMoniker": "Models\\StudentDTO.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\StudentDTO.cs",
+              "RelativeToolTip": "Models\\StudentDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T09:54:02.861Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ICollegeRepository.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Repositories\\ICollegeRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\ICollegeRepository.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Repositories\\ICollegeRepository.cs",
+              "RelativeToolTip": "Repositories\\ICollegeRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T09:15:57.251Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CollegeRepository.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Repositories\\CollegeRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\CollegeRepository.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Repositories\\CollegeRepository.cs",
+              "RelativeToolTip": "Repositories\\CollegeRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T09:16:14.539Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "IemailService.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Repositories\\IemailService.cs",
+              "RelativeDocumentMoniker": "Repositories\\IemailService.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Repositories\\IemailService.cs",
+              "RelativeToolTip": "Repositories\\IemailService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T06:55:00.162Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Emailservice.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Repositories\\Emailservice.cs",
+              "RelativeDocumentMoniker": "Repositories\\Emailservice.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Repositories\\Emailservice.cs",
+              "RelativeToolTip": "Repositories\\Emailservice.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T06:55:24.05Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "MailRequest.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\MailRequest.cs",
+              "RelativeDocumentMoniker": "Models\\MailRequest.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\MailRequest.cs",
+              "RelativeToolTip": "Models\\MailRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T06:58:28.517Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "CourseController.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Controllers\\CourseController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CourseController.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Controllers\\CourseController.cs",
+              "RelativeToolTip": "Controllers\\CourseController.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAiwFIAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T09:32:56.275Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Student.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\Student.cs",
+              "RelativeDocumentMoniker": "Models\\Student.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\Student.cs",
+              "RelativeToolTip": "Models\\Student.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBoAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T04:57:27.96Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "20251030084212_initialize1.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Migrations\\20251030084212_initialize1.cs",
+              "RelativeDocumentMoniker": "Migrations\\20251030084212_initialize1.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Migrations\\20251030084212_initialize1.cs",
+              "RelativeToolTip": "Migrations\\20251030084212_initialize1.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T08:42:13.071Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "CourseDTO.cs",
+              "DocumentMoniker": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\CourseDTO.cs",
+              "RelativeDocumentMoniker": "Models\\CourseDTO.cs",
+              "ToolTip": "D:\\Esyasoft_Adv\\DotNet\\CoursesAssignviews\\Models\\CourseDTO.cs",
+              "RelativeToolTip": "Models\\CourseDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T09:53:46.757Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
