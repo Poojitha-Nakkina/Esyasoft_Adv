@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "My Meters";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h3 class="mb-4 fw-bold text-primary">
+        <i class="bi bi-speedometer2"></i> My Meters
+    </h3>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-bordered table-hover align-middle text-center mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Meter Serial No</th>
+                    <th>DTR ID</th>
+                    <th>IP Address</th>
+                    <th>ICCID</th>
+                    <th>IMSI</th>
+                    <th>Manufacturer</th>
+                    <th>Firmware</th>
+                    <th>Category</th>
+                    <th>Install Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="myMeterTableBody">
+                <tr><td colspan="10" class="text-muted">Loading meters...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    const apiBase = "https://localhost:7285/api/Meters";
+    const token = localStorage.getItem("jwtToken");
+    const consumerId = localStorage.getItem("consumerId"); // ✅ stored during login
+
+    $(document).ready(() => {
+        if (!consumerId) {
+            alert("Consumer ID not found. Please log in again.");
+            return;
+        }
+        loadMyMeters();
+    });
+
+    function authHeader() {
+        return { "Authorization": "Bearer " + token };
+    }
+
+    async function loadMyMeters() {
+        try {
+            const res = await fetch(`${apiBase}/ByConsumer/${consumerId}`, { headers: authHeader() });
+            if (!res.ok) {
+                const msg = await res.text();
+                throw new Error(msg || "Failed to load meters");
+            }
+
+            const meters = await res.json();
+            renderTable(meters);
+        } catch (err) {
+            console.error(err);
+            $("#myMeterTableBody").html(`<tr><td colspan="10" class="text-danger">⚠️ ${err.message}</td></tr>`);
+        }
+    }
+
+    function renderTable(meters) {
+        const tbody = $("#myMeterTableBody");
+        tbody.html("");
+
+        if (!meters.length) {
+            tbody.html(`<tr><td colspan="10" class="text-muted">No meters found for your account.</td></tr>`);
+            return;
+        }
+
+        meters.forEach(m => {
+            tbody.append(`
+                <tr>
+                    <td>${m.meterSerialNo}</td>
+                    <td>${m.dtrid || "-"}</td>
+                    <td>${m.ipaddress || "-"}</td>
+                    <td>${m.iccid || "-"}</td>
+                    <td>${m.imsi || "-"}</td>
+                    <td>${m.manufacturer || "-"}</td>
+                    <td>${m.firmware || "-"}</td>
+                    <td>${m.category || "-"}</td>
+                    <td>${m.installDate ? new Date(m.installDate).toLocaleDateString() : "-"}</td>
+                    <td>
+                        <span class="badge ${m.status === "Active" ? "bg-success" : "bg-danger"}">
+                            ${m.status}
+                        </span>
+                    </td>
+                </tr>
+            `);
+        });
+    }
+</script>

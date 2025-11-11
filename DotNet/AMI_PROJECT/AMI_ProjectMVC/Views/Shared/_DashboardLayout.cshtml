@@ -1,0 +1,222 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AMI_ProjectMVC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar {
+            width: 18%;
+            background-color: #1e293b;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 56px; /* below navbar */
+            overflow-y: auto;
+        }
+
+            .sidebar a {
+                color: white;
+                text-decoration: none;
+                display: block;
+                padding: 10px 0;
+                border-radius: 8px;
+                transition: background 0.2s;
+                font-size: 1rem;
+            }
+
+                .sidebar a:hover {
+                    background-color: #334155;
+                }
+
+        .navbar-custom {
+            background-color: #8b0000;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+            padding: 0.7rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .navbar-custom .brand {
+                font-weight: bold;
+                font-size: 1.3rem;
+                color: white;
+                text-decoration: none;
+            }
+
+            .navbar-custom .search-box {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                background-color: white;
+                border-radius: 20px;
+                padding: 2px 10px;
+                width: 250px;
+            }
+
+            .navbar-custom input {
+                border: none;
+                outline: none;
+                width: 100%;
+                font-size: 0.95rem;
+            }
+
+            .navbar-custom .logout-btn {
+                border: none;
+                background: none;
+                color: white;
+                font-size: 1rem;
+                margin-left: 10px;
+                cursor: pointer;
+            }
+
+        .main-content {
+            margin-left: 18%;
+            margin-top: 56px;
+            background-color: #f8fafc;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        @@media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar-custom">
+        <a href="/" class="brand">AMI</a>
+
+        <div class="d-flex align-items-center">
+            <div class="search-box me-3">
+                <input type="text" id="searchInput" placeholder="Search..." />
+                <button id="searchBtn" class="btn btn-sm" style="background:transparent; border:none;">
+                    <i class="bi bi-search text-dark"></i>
+                </button>
+            </div>
+
+            <button class="logout-btn" id="logoutBtn" title="Logout">
+                <i class="bi bi-box-arrow-right"></i>&nbsp;Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebarMenu">
+        <!-- Admin-only -->
+        <a href="/Meter/MeterData" data-role="Admin">⚡ Meter</a>
+        <a href="/UploadMeterReading/Upload" data-role="Admin">📤 Upload Meter</a>
+        <a href="/MeterReading/MeterReadingData" data-role="Admin">📈 Meter Reading</a>
+        <a href="/BillReading/BillReadingData" data-role="Admin">💡 Bill Reading</a>
+        <a href="/Consumer/ConsumerData" data-role="Admin">👤 Consumer</a>
+        <a href="/OrgUnit/Org" data-role="Admin">🏢 Org Unit</a>
+        <a href="/User/UserData" data-role="Admin">👥 Users</a>
+
+        <!-- Consumer-only -->
+        <a href="/Meter/MyMeters" data-role="Consumer">⚡ My Meters</a>
+        <a href="/MeterReading/ConsumerMeterData" data-role="Consumer">⚡ Meterreadingss</a>
+
+        <a href="/Consumer/Consumer" data-role="Consumer">👤 My Profile</a>
+        <a href="/BillReading/BillReadingConsumer" data-role="Consumer">💡 My Bills</a>
+        <!-- Common (visible to all) -->
+        <a href="/Tariff/TariffData" data-role="All">💰 Tariff</a>
+        <a href="/TariffSlab/TariffSlabData" data-role="All">📊 Tariff Slabs</a>
+        <a href="/TODRules" data-role="All">⏰ TOD Rules</a>
+
+
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+        @RenderBody()
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const logoutBtn = document.getElementById("logoutBtn");
+            const sidebarLinks = document.querySelectorAll("#sidebarMenu a");
+            let role = localStorage.getItem("role");
+            if(role === "SuperAdmin" || role === "ZoneAdmin") {
+                // Treat SuperAdmin and ZoneAdmin as Admin for UI purposes
+                role = "Admin";
+            }
+            // 🔒 Hide links based on role
+            sidebarLinks.forEach(link => {
+                const allowed = link.getAttribute("data-role");
+                if (allowed === "All") return; // visible to everyone
+                if (allowed === "Admin" && role !== "Admin") {
+                    link.style.display = "none";
+                }
+                if (allowed === "Consumer" && role !== "Consumer") {
+                    link.style.display = "none";
+                }
+            });
+
+            // 🚪 Logout
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", function () {
+                    if (!confirm("Are you sure you want to logout?")) return;
+                    try {
+                        localStorage.removeItem("jwtToken");
+                        localStorage.removeItem("role");
+                        localStorage.removeItem("consumerId");
+                        window.location.href = "/Auth/Login";
+                    } catch (e) {
+                        console.error("Logout failed:", e);
+                        window.location.href = "/Auth/Login";
+                    }
+                });
+            }
+
+            // 🔍 Search
+            const searchInput = document.getElementById("searchInput");
+            const searchBtn = document.getElementById("searchBtn");
+            function doSearch() {
+                const q = (searchInput?.value || "").trim();
+                if (!q) return;
+                alert("Search: " + q);
+            }
+            if (searchInput) searchInput.addEventListener("keyup", e => { if (e.key === "Enter") doSearch(); });
+            if (searchBtn) searchBtn.addEventListener("click", doSearch);
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

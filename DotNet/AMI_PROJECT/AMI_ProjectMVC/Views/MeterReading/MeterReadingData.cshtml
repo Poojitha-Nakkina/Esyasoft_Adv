@@ -1,0 +1,176 @@
+﻿
+
+
+
+@{
+    ViewData["Title"] = "Meter Reading";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Your App Name</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h3 class="mb-4">
+            <i class="bi bi-speedometer2"></i> Meter Reading
+        </h3>
+        <div class="mb-4" style="max-width: 400px;">
+            <label for="meterSelect" class="form-label fw-semibold">Select Meter</label>
+            <select id="meterSelect" class="form-select">
+                <option value="">-- Select a Meter --</option>
+                <!-- Dynamically loaded meters -->
+            </select>
+        </div>
+
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-bordered table-hover align-middle text-center mb-0">
+                <thead class="table-dark text-white">
+                    <tr>
+                        <th>Reading ID</th>
+                        <th>Meter ID</th>
+                        <th>Reading Value</th>
+                        <th>Reading Date</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody id="meterReadingsTableBody">
+                    <tr><td colspan="5" class="text-muted">Loading meter readings...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Meter Readings Pagination" class="mt-3">
+            <ul class="pagination justify-content-center" id="paginationControls">
+                <!-- Pagination links will be added here -->
+            </ul>
+        </nav>
+    </div>
+
+    <!-- jQuery & Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const apiBase = "https://localhost:7285/api"; // Adjust to your API base URL
+        const token = localStorage.getItem("jwtToken");
+
+        let allReadings = [];
+        let currentPage = 1;
+        const itemsPerPage = 10; // Adjust as needed
+
+        $(document).ready(function () {
+            loadMeters();
+            loadAllMeterReadings().then(() => {
+                displayMeterReadings(); // Display all readings initially
+            });
+
+            $("#meterSelect").change(function () {
+                const meterId = $(this).val();
+                currentPage = 1; // Reset to first page on filter change
+                displayMeterReadings(meterId);
+            });
+        });
+
+        function authHeader() {
+            return { "Authorization": "Bearer " + token };
+        }
+
+        async function loadMeters() {
+            try {
+                const res = await fetch(`${apiBase}/Meters/AllMeters`, { headers: authHeader() });
+                if (!res.ok) throw new Error("Failed to load meters");
+                const meters = await res.json();
+                const $meterSelect = $("#meterSelect");
+                $meterSelect.html('<option value="">-- Select a Meter --</option>');
+                meters.forEach(meter => {
+                    $meterSelect.append(`<option value="${meter.meterId}">${meter.meterSerialNo || meter.meterId}</option>`);
+                });
+            } catch (error) {
+                alert("Error loading meters: " + error.message);
+                console.error(error);
+            }
+        }
+
+        async function loadAllMeterReadings() {
+            try {
+                const res = await fetch(`${apiBase}/MeterReading/AllMeterReadings`, { headers: authHeader() });
+                if (!res.ok) throw new Error("Failed to load meter readings");
+                allReadings = await res.json();
+            } catch (error) {
+                alert("Error loading meter readings: " + error.message);
+                console.error(error);
+            }
+        }
+
+        function displayMeterReadings(meterId = null) {
+            let readingsToDisplay = meterId ? allReadings.filter(r => r.meterId == meterId) : allReadings;
+
+            if (!readingsToDisplay.length) {
+                const message = meterId ? "No meter readings found for selected meter." : "No meter readings found.";
+                $("#meterReadingsTableBody").html(`<tr><td colspan="5" class="text-muted">${message}</td></tr>`);
+                $("#paginationControls").html('');
+                return;
+            }
+
+            // Calculate pagination
+            const totalPages = Math.ceil(readingsToDisplay.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedReadings = readingsToDisplay.slice(startIndex, endIndex);
+
+            // Render table rows
+            let rows = "";
+            paginatedReadings.forEach(r => {
+                const readingDate = r.readingDate ? new Date(r.readingDate).toLocaleString() : '-';
+                const createdAt = r.createdAt ? new Date(r.createdAt).toLocaleString() : '-';
+
+                rows += `<tr>
+                    <td>${r.readingId}</td>
+                    <td>${r.meterId}</td>
+                    <td>${r.readingValue}</td>
+                    <td>${readingDate}</td>
+                    <td>${createdAt}</td>
+                </tr>`;
+            });
+            $("#meterReadingsTableBody").html(rows);
+
+            // Render pagination controls
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            if (totalPages <= 1) {
+                $("#paginationControls").html('');
+                return;
+            }
+
+            let paginationHtml = '<li class="page-item ' + (currentPage === 1 ? 'disabled' : '') + '"><a class="page-link" href="#" onclick="changePage(' + (currentPage - 1) + ')">Previous</a></li>';
+
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHtml += '<li class="page-item ' + (i === currentPage ? 'active' : '') + '"><a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a></li>';
+            }
+
+            paginationHtml += '<li class="page-item ' + (currentPage === totalPages ? 'disabled' : '') + '"><a class="page-link" href="#" onclick="changePage(' + (currentPage + 1) + ')">Next</a></li>';
+
+            $("#paginationControls").html(paginationHtml);
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            const meterId = $("#meterSelect").val();
+            displayMeterReadings(meterId);
+        }
+    </script>
+</body>
+</html>
+

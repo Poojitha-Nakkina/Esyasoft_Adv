@@ -1,0 +1,775 @@
+﻿@* 
+
+
+
+@{
+    ViewData["Title"] = "Org Unit Hierarchy";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="bi bi-diagram-3"></i> Org Unit Hierarchy</h2>
+        <button class="btn btn-primary" id="addOrgBtn">+ Add Org Unit</button>
+    </div>
+
+    <!-- Filters -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Zone</label>
+            <select id="zoneSelect" class="form-select">
+                <option value="">-- Select Zone --</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Substation</label>
+            <select id="substationSelect" class="form-select">
+                <option value="">-- Select Substation --</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Feeder</label>
+            <select id="feederSelect" class="form-select">
+                <option value="">-- Select Feeder --</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">DTR</label>
+            <select id="dtrSelect" class="form-select">
+                <option value="">-- Select DTR --</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Quick Select -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Select DTR Directly</label>
+            <select id="quickViewDtrSelect" class="form-select">
+                <option value="">-- Select DTR --</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Selected Hierarchy -->
+    <div class="mt-3 mb-4">
+        <h5>📍 Selected Hierarchy:</h5>
+        <p id="selectedHierarchy" class="text-muted">None selected</p>
+    </div>
+
+    <!-- Meters Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Org Unit No</th>
+                    <th>Meter ID</th>
+                    <th>Meter Serial No</th>
+                    <th>Zone</th>
+                    <th>Substation</th>
+                    <th>Feeder</th>
+                    <th>DTR</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="meterTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ✅ Add Org Unit Modal -->
+<div class="modal fade" id="addOrgUnitModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Add Organization Unit</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Select Unit Type</label>
+                    <select id="orgUnitType" class="form-select">
+                        <option value="">-- Select --</option>
+                        <option value="Zone">Zone</option>
+                        <option value="Substation">Substation</option>
+                        <option value="Feeder">Feeder</option>
+                        <option value="DTR">DTR</option>
+                    </select>
+                </div>
+                <div id="orgUnitFields"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveOrgUnitBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const apiBase = "https://localhost:7285/api";
+    const token = localStorage.getItem("jwtToken");
+
+    let zones = [], substations = [], feeders = [], dtrs = [], meters = [];
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        await loadAllData();
+
+        document.getElementById("zoneSelect").addEventListener("change", handleZoneChange);
+        document.getElementById("substationSelect").addEventListener("change", handleSubstationChange);
+        document.getElementById("feederSelect").addEventListener("change", handleFeederChange);
+        document.getElementById("dtrSelect").addEventListener("change", updateMeterDisplay);
+        document.getElementById("quickViewDtrSelect").addEventListener("change", handleQuickView);
+
+        // Add Org Unit button
+        document.getElementById("addOrgBtn").addEventListener("click", () => {
+            const modal = new bootstrap.Modal(document.getElementById("addOrgUnitModal"));
+            modal.show();
+        });
+    });
+
+    // Load all hierarchical data
+    async function loadAllData() {
+        [zones, substations, feeders, dtrs, meters] = await Promise.all([
+            fetchData(`${apiBase}/Zone/AllZones`),
+            fetchData(`${apiBase}/Substation/AllSubstations`),
+            fetchData(`${apiBase}/Feeders/AllFeeders`),
+            fetchData(`${apiBase}/Dtr/AllDtrs`),
+            fetchData(`${apiBase}/Meters/AllMeters`)
+        ]);
+
+        populateDropdown("zoneSelect", zones, "zoneId", "zoneName");
+        populateDropdown("quickViewDtrSelect", dtrs, "dtrid", "dtrname");
+    }
+
+    async function fetchData(url) {
+        const res = await fetch(url, { headers: { "Authorization": `Bearer ${token}` } });
+        return res.ok ? res.json() : [];
+    }
+
+    function populateDropdown(selectId, data, valueKey, textKey, filterFn = null) {
+        const select = document.getElementById(selectId);
+        select.innerHTML = `<option value="">-- Select --</option>`;
+        const filtered = filterFn ? data.filter(filterFn) : data;
+        filtered.forEach(item => {
+            select.innerHTML += `<option value="${item[valueKey]}">${item[textKey]}</option>`;
+        });
+    }
+
+    // Dropdown logic
+    function handleZoneChange() {
+        const zoneId = parseInt(document.getElementById("zoneSelect").value);
+        populateDropdown("substationSelect", substations, "substationId", "substationName", s => s.zoneId === zoneId);
+        clearDropdowns(["feederSelect", "dtrSelect"]);
+        updateMeterDisplay();
+    }
+
+    function handleSubstationChange() {
+        const substationId = parseInt(document.getElementById("substationSelect").value);
+        populateDropdown("feederSelect", feeders, "feederId", "feederName", f => f.substationId === substationId);
+        clearDropdowns(["dtrSelect"]);
+        updateMeterDisplay();
+    }
+
+    function handleFeederChange() {
+        const feederId = parseInt(document.getElementById("feederSelect").value);
+        populateDropdown("dtrSelect", dtrs, "dtrid", "dtrname", d => d.feederId === feederId);
+        updateMeterDisplay();
+    }
+
+    // Quick View autofill
+    function handleQuickView(e) {
+        const dtrId = parseInt(e.target.value);
+        if (!dtrId) return;
+
+        const selectedDtr = dtrs.find(d => d.dtrid === dtrId);
+        const selectedFeeder = feeders.find(f => f.feederId === selectedDtr.feederId);
+        const selectedSub = substations.find(s => s.substationId === selectedFeeder.substationId);
+        const selectedZone = zones.find(z => z.zoneId === selectedSub.zoneId);
+
+        document.getElementById("zoneSelect").value = selectedZone.zoneId;
+        handleZoneChange();
+
+        setTimeout(() => {
+            document.getElementById("substationSelect").value = selectedSub.substationId;
+            handleSubstationChange();
+
+            setTimeout(() => {
+                document.getElementById("feederSelect").value = selectedFeeder.feederId;
+                handleFeederChange();
+
+                setTimeout(() => {
+                    document.getElementById("dtrSelect").value = selectedDtr.dtrid;
+                    updateMeterDisplay();
+                }, 250);
+            }, 250);
+        }, 250);
+    }
+
+    function updateMeterDisplay() {
+        const zoneId = parseInt(document.getElementById("zoneSelect").value);
+        const substationId = parseInt(document.getElementById("substationSelect").value);
+        const feederId = parseInt(document.getElementById("feederSelect").value);
+        const dtrId = parseInt(document.getElementById("dtrSelect").value);
+
+        let filteredMeters = [...meters];
+
+        if (dtrId) filteredMeters = filteredMeters.filter(m => m.dtrid === dtrId);
+        else if (feederId) {
+            const dtrIds = dtrs.filter(d => d.feederId === feederId).map(d => d.dtrid);
+            filteredMeters = filteredMeters.filter(m => dtrIds.includes(m.dtrid));
+        }
+        else if (substationId) {
+            const feederIds = feeders.filter(f => f.substationId === substationId).map(f => f.feederId);
+            const dtrIds = dtrs.filter(d => feederIds.includes(d.feederId)).map(d => d.dtrid);
+            filteredMeters = filteredMeters.filter(m => dtrIds.includes(m.dtrid));
+        }
+        else if (zoneId) {
+            const subIds = substations.filter(s => s.zoneId === zoneId).map(s => s.substationId);
+            const feederIds = feeders.filter(f => subIds.includes(f.substationId)).map(f => f.feederId);
+            const dtrIds = dtrs.filter(d => feederIds.includes(d.feederId)).map(d => d.dtrid);
+            filteredMeters = filteredMeters.filter(m => dtrIds.includes(m.dtrid));
+        }
+
+        renderMeters(filteredMeters);
+        displaySelectedHierarchy();
+    }
+
+    function renderMeters(data) {
+        const tbody = document.getElementById("meterTableBody");
+        tbody.innerHTML = data.length ? "" : "<tr><td colspan='8'>No meters found</td></tr>";
+
+        data.forEach((m, i) => {
+            const dtr = dtrs.find(d => d.dtrid === m.dtrid);
+            const feeder = feeders.find(f => dtr && f.feederId === dtr.feederId);
+            const sub = substations.find(s => feeder && s.substationId === feeder.substationId);
+            const zone = zones.find(z => sub && z.zoneId === sub.zoneId);
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${m.meterId}</td>
+                    <td>${m.meterSerialNo || "-"}</td>
+                    <td>${zone?.zoneName || "-"}</td>
+                    <td>${sub?.substationName || "-"}</td>
+                    <td>${feeder?.feederName || "-"}</td>
+                    <td>${dtr?.dtrname || "-"}</td>
+                    <td>${m.status || "-"}</td>
+                </tr>`;
+        });
+    }
+
+    function clearDropdowns(ids) {
+        ids.forEach(id => {
+            document.getElementById(id).innerHTML = `<option value="">-- Select --</option>`;
+        });
+    }
+
+    function displaySelectedHierarchy() {
+        const zone = document.getElementById("zoneSelect").selectedOptions[0]?.text;
+        const sub = document.getElementById("substationSelect").selectedOptions[0]?.text;
+        const feeder = document.getElementById("feederSelect").selectedOptions[0]?.text;
+        const dtr = document.getElementById("dtrSelect").selectedOptions[0]?.text;
+
+        const selected = [zone, sub, feeder, dtr].filter(v => v && !v.includes("-- Select")).join(" → ");
+        document.getElementById("selectedHierarchy").innerText = selected || "None selected";
+    }
+
+    // ================= Add Org Unit Logic =================
+    document.getElementById("orgUnitType").addEventListener("change", function () {
+        const type = this.value;
+        const fieldsContainer = document.getElementById("orgUnitFields");
+        fieldsContainer.innerHTML = "";
+
+        if (type === "Zone") {
+            fieldsContainer.innerHTML = `
+                <div class="mb-3">
+                    <label class="form-label">Zone Name</label>
+                    <input type="text" id="zoneName" class="form-control" placeholder="Enter Zone Name">
+                </div>`;
+        } else if (type === "Substation") {
+            fieldsContainer.innerHTML = `
+                <div class="mb-3">
+                    <label class="form-label">Substation Name</label>
+                    <input type="text" id="substationName" class="form-control" placeholder="Enter Substation Name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Select Zone</label>
+                    <select id="subZoneId" class="form-select">
+                        <option value="">-- Select Zone --</option>
+                        ${zones.map(z => `<option value="${z.zoneId}">${z.zoneName}</option>`).join("")}
+                    </select>
+                </div>`;
+        } else if (type === "Feeder") {
+            fieldsContainer.innerHTML = `
+                <div class="mb-3">
+                    <label class="form-label">Feeder Name</label>
+                    <input type="text" id="feederName" class="form-control" placeholder="Enter Feeder Name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Select Substation</label>
+                    <select id="feederSubId" class="form-select">
+                        <option value="">-- Select Substation --</option>
+                        ${substations.map(s => `<option value="${s.substationId}">${s.substationName}</option>`).join("")}
+                    </select>
+                </div>`;
+        } else if (type === "DTR") {
+            fieldsContainer.innerHTML = `
+                <div class="mb-3">
+                    <label class="form-label">DTR Name</label>
+                    <input type="text" id="dtrName" class="form-control" placeholder="Enter DTR Name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Select Feeder</label>
+                    <select id="dtrFeederId" class="form-select">
+                        <option value="">-- Select Feeder --</option>
+                        ${feeders.map(f => `<option value="${f.feederId}">${f.feederName}</option>`).join("")}
+                    </select>
+                </div>`;
+        }
+    });
+
+    document.getElementById("saveOrgUnitBtn").addEventListener("click", async () => {
+        const type = document.getElementById("orgUnitType").value;
+        if (!type) return alert("Please select a unit type!");
+
+        let payload = {};
+        let apiUrl = "";
+
+        switch (type) {
+            case "Zone":
+                payload = { zoneName: document.getElementById("zoneName").value };
+                apiUrl = `${apiBase}/Zone/AddZone`;
+                break;
+            case "Substation":
+                payload = {
+                    substationName: document.getElementById("substationName").value,
+                    zoneId: parseInt(document.getElementById("subZoneId").value)
+                };
+                apiUrl = `${apiBase}/Substation/AddSubstation`;
+                break;
+            case "Feeder":
+                payload = {
+                    feederName: document.getElementById("feederName").value,
+                    substationId: parseInt(document.getElementById("feederSubId").value)
+                };
+                apiUrl = `${apiBase}/Feeders/AddFeeder`;
+                break;
+            case "DTR":
+                payload = {
+                    dtrname: document.getElementById("dtrName").value,
+                    feederId: parseInt(document.getElementById("dtrFeederId").value)
+                };
+                apiUrl = `${apiBase}/Dtr/AddDtr`;
+                break;
+        }
+
+        const res = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            alert(`${type} added successfully!`);
+            await loadAllData();
+            bootstrap.Modal.getInstance(document.getElementById("addOrgUnitModal")).hide();
+        } else {
+            alert("Error adding unit. Please try again.");
+        }
+    });
+</script> *@
+
+
+@{
+    ViewData["Title"] = "Org Unit Hierarchy";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="bi bi-diagram-3"></i> Org Unit Hierarchy</h2>
+        <button class="btn btn-primary" id="addOrgBtn">+ Add Org Unit</button>
+    </div>
+
+    <!-- Filters -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Zone</label>
+            <select id="zoneSelect" class="form-select">
+                <option value="">-- Select Zone --</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Substation</label>
+            <select id="substationSelect" class="form-select">
+                <option value="">-- Select Substation --</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Feeder</label>
+            <select id="feederSelect" class="form-select">
+                <option value="">-- Select Feeder --</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">DTR</label>
+            <select id="dtrSelect" class="form-select">
+                <option value="">-- Select DTR --</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Quick Select -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Select DTR Directly</label>
+            <select id="quickViewDtrSelect" class="form-select">
+                <option value="">-- Select DTR --</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Selected Hierarchy -->
+    <div class="mt-3 mb-4">
+        <h5>📍 Selected Hierarchy:</h5>
+        <p id="selectedHierarchy" class="text-muted">None selected</p>
+    </div>
+
+    <!-- Meters Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Org Unit No</th>
+                    <th>Meter ID</th>
+                    <th>Meter Serial No</th>
+                    <th>Zone</th>
+                    <th>Substation</th>
+                    <th>Feeder</th>
+                    <th>DTR</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="meterTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ✅ Add Org Unit Modal -->
+<div class="modal fade" id="addOrgUnitModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Add Organization Unit</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Select Unit Type</label>
+                    <select id="orgUnitType" class="form-select">
+                        <option value="">-- Select --</option>
+                        <option value="zone">Zone</option>
+                        <option value="substation">Substation</option>
+                        <option value="feeder">Feeder</option>
+                        <option value="dtr">DTR</option>
+                    </select>
+                </div>
+                <div id="orgUnitFields"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveOrgUnitBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const apiBase = "https://localhost:7285/api";
+    const token = localStorage.getItem("jwtToken");
+
+    let zones = [], substations = [], feeders = [], dtrs = [], meters = [];
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        await loadAllData();
+
+        document.getElementById("zoneSelect").addEventListener("change", handleZoneChange);
+        document.getElementById("substationSelect").addEventListener("change", handleSubstationChange);
+        document.getElementById("feederSelect").addEventListener("change", handleFeederChange);
+        document.getElementById("dtrSelect").addEventListener("change", updateMeterDisplay);
+        document.getElementById("quickViewDtrSelect").addEventListener("change", handleQuickView);
+
+        document.getElementById("addOrgBtn").addEventListener("click", () => {
+            const modal = new bootstrap.Modal(document.getElementById("addOrgUnitModal"));
+            modal.show();
+        });
+    });
+
+    // Load hierarchy data
+    async function loadAllData() {
+        [zones, substations, feeders, dtrs, meters] = await Promise.all([
+            fetchData(`${apiBase}/Zone/AllZones`),
+            fetchData(`${apiBase}/Substation/AllSubstations`),
+            fetchData(`${apiBase}/Feeders/AllFeeders`),
+            fetchData(`${apiBase}/Dtr/AllDtrs`),
+            fetchData(`${apiBase}/Meters/AllMeters`)
+        ]);
+
+        populateDropdown("zoneSelect", zones, "zoneId", "zoneName");
+        populateDropdown("quickViewDtrSelect", dtrs, "dtrid", "dtrname");
+    }
+
+    async function fetchData(url) {
+        const res = await fetch(url, { headers: { "Authorization": `Bearer ${token}` } });
+        return res.ok ? res.json() : [];
+    }
+
+    function populateDropdown(selectId, data, valueKey, textKey, filterFn = null) {
+        const select = document.getElementById(selectId);
+        select.innerHTML = `<option value="">-- Select --</option>`;
+        const filtered = filterFn ? data.filter(filterFn) : data;
+        filtered.forEach(item => {
+            select.innerHTML += `<option value="${item[valueKey]}">${item[textKey]}</option>`;
+        });
+    }
+
+    // Dropdown Logic
+    function handleZoneChange() {
+        const zoneId = parseInt(document.getElementById("zoneSelect").value);
+        populateDropdown("substationSelect", substations, "substationId", "substationName", s => s.zoneId === zoneId);
+        clearDropdowns(["feederSelect", "dtrSelect"]);
+        updateMeterDisplay();
+    }
+
+    function handleSubstationChange() {
+        const substationId = parseInt(document.getElementById("substationSelect").value);
+        populateDropdown("feederSelect", feeders, "feederId", "feederName", f => f.substationId === substationId);
+        clearDropdowns(["dtrSelect"]);
+        updateMeterDisplay();
+    }
+
+    function handleFeederChange() {
+        const feederId = parseInt(document.getElementById("feederSelect").value);
+        populateDropdown("dtrSelect", dtrs, "dtrid", "dtrname", d => d.feederId === feederId);
+        updateMeterDisplay();
+    }
+
+    function handleQuickView(e) {
+        const dtrId = parseInt(e.target.value);
+        if (!dtrId) return;
+
+        const selectedDtr = dtrs.find(d => d.dtrid === dtrId);
+        const selectedFeeder = feeders.find(f => f.feederId === selectedDtr.feederId);
+        const selectedSub = substations.find(s => s.substationId === selectedFeeder.substationId);
+        const selectedZone = zones.find(z => z.zoneId === selectedSub.zoneId);
+
+        document.getElementById("zoneSelect").value = selectedZone.zoneId;
+        handleZoneChange();
+
+        setTimeout(() => {
+            document.getElementById("substationSelect").value = selectedSub.substationId;
+            handleSubstationChange();
+
+            setTimeout(() => {
+                document.getElementById("feederSelect").value = selectedFeeder.feederId;
+                handleFeederChange();
+
+                setTimeout(() => {
+                    document.getElementById("dtrSelect").value = selectedDtr.dtrid;
+                    updateMeterDisplay();
+                }, 250);
+            }, 250);
+        }, 250);
+    }
+
+    function updateMeterDisplay() {
+        const zoneId = parseInt(document.getElementById("zoneSelect").value);
+        const substationId = parseInt(document.getElementById("substationSelect").value);
+        const feederId = parseInt(document.getElementById("feederSelect").value);
+        const dtrId = parseInt(document.getElementById("dtrSelect").value);
+
+        let filteredMeters = [...meters];
+
+        if (dtrId) filteredMeters = filteredMeters.filter(m => m.dtrid === dtrId);
+        else if (feederId) {
+            const dtrIds = dtrs.filter(d => d.feederId === feederId).map(d => d.dtrid);
+            filteredMeters = filteredMeters.filter(m => dtrIds.includes(m.dtrid));
+        }
+        else if (substationId) {
+            const feederIds = feeders.filter(f => f.substationId === substationId).map(f => f.feederId);
+            const dtrIds = dtrs.filter(d => feederIds.includes(d.feederId)).map(d => d.dtrid);
+            filteredMeters = filteredMeters.filter(m => dtrIds.includes(m.dtrid));
+        }
+        else if (zoneId) {
+            const subIds = substations.filter(s => s.zoneId === zoneId).map(s => s.substationId);
+            const feederIds = feeders.filter(f => subIds.includes(f.substationId)).map(f => f.feederId);
+            const dtrIds = dtrs.filter(d => feederIds.includes(d.feederId)).map(d => d.dtrid);
+            filteredMeters = filteredMeters.filter(m => dtrIds.includes(m.dtrid));
+        }
+
+        renderMeters(filteredMeters);
+        displaySelectedHierarchy();
+    }
+
+    function renderMeters(data) {
+        const tbody = document.getElementById("meterTableBody");
+        tbody.innerHTML = data.length ? "" : "<tr><td colspan='8'>No meters found</td></tr>";
+
+        data.forEach((m, i) => {
+            const dtr = dtrs.find(d => d.dtrid === m.dtrid);
+            const feeder = feeders.find(f => dtr && f.feederId === dtr.feederId);
+            const sub = substations.find(s => feeder && s.substationId === feeder.substationId);
+            const zone = zones.find(z => sub && z.zoneId === sub.zoneId);
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${m.meterId}</td>
+                    <td>${m.meterSerialNo || "-"}</td>
+                    <td>${zone?.zoneName || "-"}</td>
+                    <td>${sub?.substationName || "-"}</td>
+                    <td>${feeder?.feederName || "-"}</td>
+                    <td>${dtr?.dtrname || "-"}</td>
+                    <td>${m.status || "-"}</td>
+                </tr>`;
+        });
+    }
+
+    function clearDropdowns(ids) {
+        ids.forEach(id => {
+            document.getElementById(id).innerHTML = `<option value="">-- Select --</option>`;
+        });
+    }
+
+    function displaySelectedHierarchy() {
+        const zone = document.getElementById("zoneSelect").selectedOptions[0]?.text;
+        const sub = document.getElementById("substationSelect").selectedOptions[0]?.text;
+        const feeder = document.getElementById("feederSelect").selectedOptions[0]?.text;
+        const dtr = document.getElementById("dtrSelect").selectedOptions[0]?.text;
+
+        const selected = [zone, sub, feeder, dtr].filter(v => v && !v.includes("-- Select")).join(" → ");
+        document.getElementById("selectedHierarchy").innerText = selected || "None selected";
+    }
+
+    // ================= Add Org Unit Logic =================
+    document.getElementById("orgUnitType").addEventListener("change", function () {
+        const type = this.value;
+        const container = document.getElementById("orgUnitFields");
+        container.innerHTML = "";
+
+        if (type === "zone") {
+            container.innerHTML = `
+              <label class="form-label">Zone Name</label>
+              <input type="text" id="zoneName" class="form-control" placeholder="Enter Zone Name" />`;
+        }
+        else if (type === "substation") {
+            container.innerHTML = `
+              <label class="form-label">Select Zone</label>
+              <select id="parentZone" class="form-select mb-2"></select>
+              <label class="form-label">Substation Name</label>
+              <input type="text" id="substationName" class="form-control" placeholder="Enter Substation Name" />`;
+            populateDropdown("parentZone", zones, "zoneId", "zoneName");
+        }
+        else if (type === "feeder") {
+            container.innerHTML = `
+              <label class="form-label">Select Zone</label>
+              <select id="parentZone" class="form-select mb-2"></select>
+              <label class="form-label">Select Substation</label>
+              <select id="parentSubstation" class="form-select mb-2"></select>
+              <label class="form-label">Feeder Name</label>
+              <input type="text" id="feederName" class="form-control" placeholder="Enter Feeder Name" />`;
+            populateDropdown("parentZone", zones, "zoneId", "zoneName");
+            document.getElementById("parentZone").addEventListener("change", e => {
+                const zoneId = parseInt(e.target.value);
+                populateDropdown("parentSubstation", substations, "substationId", "substationName", s => s.zoneId === zoneId);
+            });
+        }
+        else if (type === "dtr") {
+            container.innerHTML = `
+              <label class="form-label">Select Zone</label>
+              <select id="parentZone" class="form-select mb-2"></select>
+              <label class="form-label">Select Substation</label>
+              <select id="parentSubstation" class="form-select mb-2"></select>
+              <label class="form-label">Select Feeder</label>
+              <select id="parentFeeder" class="form-select mb-2"></select>
+              <label class="form-label">DTR Name</label>
+              <input type="text" id="dtrName" class="form-control" placeholder="Enter DTR Name" />`;
+            populateDropdown("parentZone", zones, "zoneId", "zoneName");
+            document.getElementById("parentZone").addEventListener("change", e => {
+                const zoneId = parseInt(e.target.value);
+                populateDropdown("parentSubstation", substations, "substationId", "substationName", s => s.zoneId === zoneId);
+            });
+            document.getElementById("parentSubstation").addEventListener("change", e => {
+                const subId = parseInt(e.target.value);
+                populateDropdown("parentFeeder", feeders, "feederId", "feederName", f => f.substationId === subId);
+            });
+        }
+    });
+
+    // Save button handler
+    document.getElementById("saveOrgUnitBtn").addEventListener("click", async () => {
+        const type = document.getElementById("orgUnitType").value;
+        if (!type) return alert("Please select a unit type!");
+
+        let payload = {};
+        let apiUrl = "";
+
+        switch (type) {
+            case "zone":
+                payload = { zoneName: document.getElementById("zoneName").value };
+                apiUrl = `${apiBase}/Zone/AddZone`;
+                break;
+            case "substation":
+                payload = {
+                    substationName: document.getElementById("substationName").value,
+                    zoneId: parseInt(document.getElementById("parentZone").value)
+                };
+                apiUrl = `${apiBase}/Substation/AddSubstation`;
+                break;
+            case "feeder":
+                payload = {
+                    feederName: document.getElementById("feederName").value,
+                    substationId: parseInt(document.getElementById("parentSubstation").value)
+                };
+                apiUrl = `${apiBase}/Feeders/AddFeeder`;
+                break;
+            case "dtr":
+                payload = {
+                    dtrname: document.getElementById("dtrName").value,
+                    feederId: parseInt(document.getElementById("parentFeeder").value)
+                };
+                apiUrl = `${apiBase}/Dtr/AddDtr`;
+                break;
+        }
+
+        const res = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            alert(`${type.toUpperCase()} added successfully!`);
+            await loadAllData();
+            bootstrap.Modal.getInstance(document.getElementById("addOrgUnitModal")).hide();
+        } else {
+            alert("Error adding unit. Please try again.");
+        }
+    });
+</script>
+

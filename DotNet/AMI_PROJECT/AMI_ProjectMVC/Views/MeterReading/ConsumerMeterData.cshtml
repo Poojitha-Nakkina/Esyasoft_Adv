@@ -1,0 +1,276 @@
+﻿@* @{
+    ViewData["Title"] = "Consumer Meter Readings";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h3 class="mb-4">
+        <i class="bi bi-speedometer2"></i> My Meter Readings
+    </h3>
+
+    <div class="table-responsive shadow rounded">
+        <table class="table table-bordered table-striped align-middle text-center mb-0" style="font-size: 0.95rem;">
+            <thead class="table-dark text-white">
+                <tr>
+                    <th>Meter ID</th>
+                    <th>Reading Value</th>
+                    <th>Reading Date</th>
+                </tr>
+            </thead>
+            <tbody id="meterReadingsTableBody">
+                <tr><td colspan="3" class="text-muted">Loading meter readings...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const apiBase = "https://localhost:7285/api";
+    const token = localStorage.getItem("jwtToken"); // ✅ Global token
+
+    // ✅ Decode JWT and return consumer ID (or null if invalid)
+    function getConsumerIdFromToken() {
+        if (!token) {
+            console.warn("⚠️ No JWT token found in localStorage.");
+            return null;
+        }
+
+        try {
+            const base64Payload = token.split('.')[1];
+            const decodedPayload = JSON.parse(atob(base64Payload));
+
+            console.log("✅ Decoded JWT payload:", decodedPayload);
+
+            // Optional: check token expiry
+            if (decodedPayload.exp) {
+                const now = Math.floor(Date.now() / 1000);
+                if (decodedPayload.exp < now) {
+                    console.warn("⏰ Token expired, logging out.");
+                    logoutAndRedirect();
+                    return null;
+                }
+            }
+
+            // Return consumer ID (adjust claim name if your backend uses a different one)
+            return decodedPayload["nameid"] || decodedPayload["sub"] || null;
+
+        } catch (error) {
+            console.error("❌ Error decoding JWT:", error);
+            logoutAndRedirect();
+            return null;
+        }
+    }
+
+    // ✅ Logs out user and redirects to login page
+    function logoutAndRedirect() {
+        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("role");
+        alert("Your session has expired. Please log in again.");
+        window.location.href = "/Auth/Login";
+    }
+
+    // ✅ On page load
+    $(document).ready(() => {
+        const consumerId = getConsumerIdFromToken();
+
+        if (!consumerId) {
+            // handled inside getConsumerIdFromToken already
+            return;
+        }
+
+        console.log("Consumer ID extracted:", consumerId);
+        loadMetersForConsumer(consumerId);
+    });
+
+    // ✅ Fetch meters and readings for this consumer
+    async function loadMetersForConsumer(consumerId) {
+        try {
+            // 🔹 Fetch all meters
+            const metersRes = await fetch(`${apiBase}/Meters/AllMeters`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!metersRes.ok) throw new Error("Failed to fetch meters");
+            const allMeters = await metersRes.json();
+            const meters = allMeters.filter(m => m.consumerId == consumerId);
+
+            if (!meters.length) {
+                $("#meterReadingsTableBody").html("<tr><td colspan='3'>No meters found for your account.</td></tr>");
+                return;
+            }
+
+            // 🔹 Fetch all meter readings
+            const readingsRes = await fetch(`${apiBase}/MeterReading/AllMeterReadings`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!readingsRes.ok) throw new Error("Failed to fetch readings");
+            const allReadings = await readingsRes.json();
+
+            // 🔹 Filter readings for user's meters
+            const filteredReadings = allReadings.filter(r => meters.some(m => m.meterId === r.meterId));
+
+            if (!filteredReadings.length) {
+                $("#meterReadingsTableBody").html("<tr><td colspan='3'>No meter readings found for your meters.</td></tr>");
+                return;
+            }
+
+            // 🔹 Render table rows
+            const rows = filteredReadings.map(r => `
+                <tr>
+                    <td>${r.meterId}</td>
+                    <td>${r.readingValue}</td>
+                    <td>${r.readingDate ? new Date(r.readingDate).toLocaleString() : '-'}</td>
+                </tr>
+            `).join('');
+
+            $("#meterReadingsTableBody").html(rows);
+
+        } catch (error) {
+            console.error("❌ Error loading data:", error);
+            $("#meterReadingsTableBody").html("<tr><td colspan='3' class='text-danger'>Failed to load meter readings.</td></tr>");
+        }
+    }
+</script> *@
+
+@{
+    ViewData["Title"] = "Consumer Meter Readings";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h3 class="mb-4">
+        <i class="bi bi-speedometer2"></i> My Meter Readings
+    </h3>
+
+    <div id="userInfo" class="alert alert-info p-2 mb-3" style="display:none;"></div>
+
+    <div class="table-responsive shadow rounded">
+        <table class="table table-bordered table-striped align-middle text-center mb-0">
+            <thead class="table-dark text-white">
+                <tr>
+                    <th>Meter ID</th>
+                    <th>Reading Value</th>
+                    <th>Reading Date</th>
+                </tr>
+            </thead>
+            <tbody id="meterReadingsTableBody">
+                <tr><td colspan="3" class="text-muted">Loading meter readings...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    const apiBase = "https://localhost:7285/api";
+
+    // ✅ Decode JWT & get email
+    function getEmailFromToken() {
+        const token = localStorage.getItem("jwtToken");
+        if (!token) {
+            console.warn("No JWT token found");
+            return null;
+        }
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            console.log("Decoded JWT:", payload);
+
+            const email =
+                payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] ||
+                payload["email"] ||
+                null;
+
+            const name =
+                payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ||
+                payload["name"] ||
+                "User";
+
+            if (email) {
+                $("#userInfo").show().html(`<strong>Welcome, ${name}</strong> (${email})`);
+            }
+
+            return email;
+        } catch (err) {
+            console.error("Error decoding token:", err);
+            return null;
+        }
+    }
+
+    $(document).ready(async () => {
+        const token = localStorage.getItem("jwtToken");
+        const email = getEmailFromToken();
+
+        if (!email) {
+            alert("Please log in to view your meter readings.");
+            window.location.href = "/Auth/Login";
+            return;
+        }
+
+        try {
+            // 1️⃣ Get consumer by email
+            const consumerRes = await fetch(`${apiBase}/Consumer/ByEmail/${email}`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!consumerRes.ok) throw new Error("Consumer not found");
+            const consumer = await consumerRes.json();
+            console.log("Consumer found:", consumer);
+
+            // 2️⃣ Get all meters
+            const metersRes = await fetch(`${apiBase}/Meters/AllMeters`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!metersRes.ok) throw new Error("Failed to fetch meters");
+            const allMeters = await metersRes.json();
+            const meters = allMeters.filter(m => m.consumerId === consumer.consumerId);
+
+            if (meters.length === 0) {
+                $("#meterReadingsTableBody").html("<tr><td colspan='3' class='text-muted'>No meters found for this consumer.</td></tr>");
+                return;
+            }
+
+            // 3️⃣ Get readings
+            const readingsRes = await fetch(`${apiBase}/MeterReading/AllMeterReadings`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!readingsRes.ok) throw new Error("Failed to fetch readings");
+            const allReadings = await readingsRes.json();
+
+            const filteredReadings = allReadings.filter(r => meters.some(m => m.meterId === r.meterId));
+
+            if (filteredReadings.length === 0) {
+                $("#meterReadingsTableBody").html("<tr><td colspan='3' class='text-muted'>No readings available.</td></tr>");
+                return;
+            }
+
+            // ✅ Populate table
+            const rows = filteredReadings.map(r => `
+                <tr>
+                    <td>${r.meterId}</td>
+                    <td>${r.readingValue}</td>
+                    <td>${new Date(r.readingDate).toLocaleString()}</td>
+                </tr>
+            `).join("");
+
+            $("#meterReadingsTableBody").html(rows);
+
+        } catch (error) {
+            console.error("Error loading readings:", error);
+            $("#meterReadingsTableBody").html("<tr><td colspan='3' class='text-danger'>Failed to load readings.</td></tr>");
+        }
+    });
+</script>
+
